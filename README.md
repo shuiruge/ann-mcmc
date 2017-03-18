@@ -1,2 +1,2 @@
 # ann-mcmc
-An experiment of applying MCMC to ANN.
+An **experiment** of applying MCMC to ANN.
