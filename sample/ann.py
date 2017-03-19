@@ -6,8 +6,10 @@ Module of construction of ANN. It's written by numpy.
 """
 
 import numpy as np
-from random import uniform
+from random import gauss
 from math import exp
+from copy import deepcopy
+
 
 # Typing Hint
 # ----------------------
@@ -36,7 +38,7 @@ class Perceptron(object):
         self.size = size
         
         # Recall that weights contains threshold, thus len(weights) == size + 1.
-        weights = np.array([uniform(-0.05, 0.05) for i in range(size + 1)])
+        weights = np.array([gauss(0, 0.05) for i in range(size + 1)])
         self.weights = weights
         
         self.trans_function = sigmoid
@@ -94,7 +96,14 @@ class NeuralNetwork(object):
                 l = [Perceptron(size[i-1]) for j in range(size[i])]
             
             self.layers.append(l)
-            
+    
+    
+    def copy(self):
+        
+        c = deepcopy(self)
+        
+        return c
+
         
     def output(self, inputs: Array) -> Array:
         
@@ -111,4 +120,4 @@ class NeuralNetwork(object):
             
             x_inputs = x_outputs.copy()
         
-        return x_outputs   
+        return x_outputs
