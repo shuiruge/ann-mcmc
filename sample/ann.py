@@ -6,7 +6,7 @@ Module of construction of ANN. It's written by numpy.
 """
 
 import numpy as np
-from random import gauss
+from random import gauss, uniform
 from math import exp
 from copy import deepcopy
 
@@ -38,7 +38,7 @@ class Perceptron(object):
         self.size = size
         
         # Recall that weights contains threshold, thus len(weights) == size + 1.
-        weights = np.array([gauss(0, 0.05) for i in range(size + 1)])
+        weights = np.array([uniform(-0.5, 0.5) for i in range(size + 1)])
         self.weights = weights
         
         self.trans_function = sigmoid
