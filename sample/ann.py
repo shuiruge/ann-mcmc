@@ -6,14 +6,13 @@ Module of construction of ANN. It's written by numpy.
 """
 
 import numpy as np
-from random import gauss, uniform
-from math import exp
+from random import uniform
 from copy import deepcopy
 
 
 # Typing Hint
 # ----------------------
-from typing import List, Callable, Tuple, Mapping, Any
+from typing import List
 
 Array = np.array(List[float])
 # ----------------------
@@ -21,7 +20,7 @@ Array = np.array(List[float])
 
 def sigmoid(x: float) -> float:
     
-    return 1 / (1 + exp(-x))
+    return 1 / (1 + np.exp(-x))
 
 
 class Perceptron(object):
@@ -38,10 +37,17 @@ class Perceptron(object):
         self.size = size
         
         # Recall that weights contains threshold, thus len(weights) == size + 1.
-        weights = np.array([uniform(-0.5, 0.5) for i in range(size + 1)])
+        weights = np.array([uniform(-0.05, 0.05) for i in range(size + 1)])
         self.weights = weights
         
         self.trans_function = sigmoid
+
+
+    def copy(self):
+        
+        c = deepcopy(self)
+        
+        return c
         
     
     def output(self, inputs: Array) -> float:
@@ -54,6 +60,7 @@ class Perceptron(object):
         net = np.dot(self.weights, inputs0)
         
         return self.trans_function(net)
+
 
 
 class NeuralNetwork(object):
@@ -90,12 +97,14 @@ class NeuralNetwork(object):
         
         for i in range(len(size)):
             if i == 0:
-                l = [Perceptron(input_size) for j in range(size[i])]
+                l = [Perceptron(self.input_size) for _ in range(self.size[i])]
             
             else:
-                l = [Perceptron(size[i-1]) for j in range(size[i])]
+                l = [Perceptron(self.size[i - 1]) for _ in range(self.size[i])]
             
             self.layers.append(l)
+            
+        #self.weights = [[p.weights for p in l] for l in self.layers] # won't work?
     
     
     def copy(self):
@@ -105,19 +114,14 @@ class NeuralNetwork(object):
         return c
 
         
-    def output(self, inputs: Array) -> Array:
+    def output(self, inputs: List) -> List:
         
         assert len(inputs) == self.input_size
-                  
-        x_inputs = inputs.copy()
-        
+
         for layer in self.layers:
-            x_outputs = np.zeros(len(layer))
             
-            for i in range(len(layer)):
-                perceptron = layer[i]
-                x_outputs[i] = perceptron.output(x_inputs)
+            outputs = [perceptron.output(inputs) for perceptron in layer]
             
-            x_inputs = x_outputs.copy()
+            inputs = outputs.copy()
         
-        return x_outputs
+        return outputs
