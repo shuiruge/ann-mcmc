@@ -1,4 +1,3 @@
-
 """
 Description
 ---------
@@ -80,7 +79,8 @@ class NeuralNetwork(object):
     
     def __init__(self, size: List[int],
                  input_size: int,
-                 trans_function=sigmoid
+                 trans_function=sigmoid,
+                 init_weight_range=[-0.05, 0.05]
                  ) -> None:
         
         for num in size:
@@ -104,7 +104,7 @@ class NeuralNetwork(object):
             if l == 0:                
                 for p in range(self.size[l]):
                     # do not forget the threshold (the last weight)
-                    perceptron = [uniform(-0.05, 0.05)
+                    perceptron = [uniform(*init_weight_range)
                                   for w in range(self.input_size + 1)
                                   ]
                     
@@ -113,7 +113,7 @@ class NeuralNetwork(object):
             else:
                 for p in range(self.size[l]):
                     # do not forget the threshold (the last weight)
-                    perceptron = [uniform(-0.05, 0.05)
+                    perceptron = [uniform(*init_weight_range)
                                   for w in range(self.size[l - 1] + 1)
                                   ]
                     
